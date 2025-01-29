@@ -1,0 +1,22 @@
+---
+# vars file for tool
+
+db_user: mysqluser
+db_pass: user123
+db_name: Devops_Batch_Details
+table_name: Ninja_Details
+
+mysql_vars:
+      Debian:
+        mysql_package: 
+          - "mysql-server-{{mysql_version}}"
+          - python3-mysqldb
+        mysql_config_file: /etc/mysql/my.cnf
+        mysql_service: mysql
+      RedHat:
+        mysql_package: 
+            - "mariadb-server-{{mysql_version}}"
+            - python3-mysqldb
+        mysql_config_file: /etc/my.cnf
+        mysql_service: mariadb
+        

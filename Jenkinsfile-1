@@ -1,0 +1,85 @@
+node {
+    TERRAFORM_DIR_PATH = "${env.WORKSPACE}/MySQLtool/Mysql-Infra"
+    ANSIBLE_PLAY_CR_PATH = "${env.WORKSPACE}/MySQLtool/Mysql-Rool/Mysql.yml"
+    ANSIBLE_PLAY_DT_PATH = "${env.WORKSPACE}/MySQLtool/Mysql-Rool/deletedata.yml"
+    ANSIBLE_INVENTORY = "${env.WORKSPACE}/MySQLtool/Mysql-Rool/aws_ec2.yml"
+
+    properties([
+        parameters([
+            choice(name: 'action', choices: ['apply', 'destroy'], description: 'Terraform action: apply or destroy'),
+            choice(name: 'table', choices: ['create', 'delete'], description: 'MySQL table: create or delete')
+        ])
+    ])
+
+    try {
+        stage('Clone Repository') {
+            git branch: 'main', credentialsId: 'git-password', 
+            url: 'https://github.com/aayushverma191/MySQLToolRepo.git'
+        }
+
+        if (params.table != 'delete' || params.action == 'destroy') {
+            stage('Initialize Terraform') {
+                sh "terraform -chdir=${TERRAFORM_DIR_PATH} init"
+            }
+
+            stage('Validate Terraform Configuration') {
+                sh "terraform -chdir=${TERRAFORM_DIR_PATH} validate"
+            }
+
+            stage('Generate Terraform Plan') {
+                sh "terraform -chdir=${TERRAFORM_DIR_PATH} plan"
+            }
+        }
+
+        if (params.action == 'apply' && params.table != 'delete') {
+            stage('Approval for Apply Action') {
+                input message: 'Approval for infrastructure apply', ok: 'Approved'
+            }
+
+            stage('Terraform Apply') {
+                sh "terraform -chdir=${TERRAFORM_DIR_PATH} apply --auto-approve"
+            }
+        }
+
+        if (params.action == 'destroy' || (params.table != 'delete' && params.table != 'create')) {
+            stage('Approval for Destroy Action') {
+                input message: 'Approval for infrastructure destroy', ok: 'Approved'
+            }
+
+            stage('Terraform Destroy Resources') {
+                sh "terraform -chdir=${TERRAFORM_DIR_PATH} destroy --auto-approve"
+            }
+        }
+
+        if (params.table == 'create' && params.action == 'apply') {
+            stage('Install MySQL and Create Table') {
+                ansiblePlaybook credentialsId: 'pem-key', disableHostKeyChecking: true, installation: 'ansible',
+                inventory: "${ANSIBLE_INVENTORY}", playbook: "${ANSIBLE_PLAY_CR_PATH}"
+            }
+        }
+
+        if (params.table == 'delete' && params.action == 'apply') {
+            stage('Approval for Delete Table') {
+                input message: 'Approval for table delete', ok: 'Approved'
+            }
+
+            stage('Delete MySQL Table') {
+                ansiblePlaybook credentialsId: 'pem-key', disableHostKeyChecking: true, installation: 'ansible',
+                inventory: "${ANSIBLE_INVENTORY}", playbook: "${ANSIBLE_PLAY_DT_PATH}"
+            }
+        }
+    } catch (Exception e) {
+        slackSend(channel: 'tool_notification', message: "FAILURE: The build process encountered an issue. Job Details - Name: ${env.JOB_NAME}, Build Number: ${env.BUILD_NUMBER}, URL: ${env.BUILD_URL}")
+        throw e
+    } finally {
+        script {
+            if (params.table == 'create' && params.action == 'apply') {
+                slackSend(channel: 'tool_notification', message: "Deployment Successful: Installed MySQL & table has been created successfully. Job Details - Name: ${env.JOB_NAME}, Build Number: ${env.BUILD_NUMBER}, URL: ${env.BUILD_URL}")
+            } else if (params.action == 'destroy' || (params.table != 'delete' && params.table != 'create')) {
+                slackSend(channel: 'tool_notification', message: "Destroy Successful: Infrastructure destruction completed successfully. Job Details - Name: ${env.JOB_NAME}, Build Number: ${env.BUILD_NUMBER}, URL: ${env.BUILD_URL}")
+            } else if (params.table == 'delete' && params.action == 'apply') {
+                slackSend(channel: 'tool_notification', message: "Delete Table Successful: The specified MySQL table has been deleted successfully. Job Details - Name: ${env.JOB_NAME}, Build Number: ${env.BUILD_NUMBER}, URL: ${env.BUILD_URL}")
+            }
+        }
+    }
+}
