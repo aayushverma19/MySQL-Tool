@@ -14,7 +14,3 @@ output "Bastion_Public_IP" {
   value       = aws_instance.public-instance.public_ip
   description = "Public IP address of the bastion EC2 instance"
 }
-# output "load_balancer_DNS" {
-#   value       = aws_lb.MySQL-alb.dns_name
-#   description = "DNS name of load balancer"
-# }
