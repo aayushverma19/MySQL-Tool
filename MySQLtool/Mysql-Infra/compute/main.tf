@@ -13,6 +13,25 @@ resource "aws_instance" "public-instance" {
     volume_size = var.volume_size
   }
 
+  provisioner "file" {
+    source      = var.pem_source_path
+    destination = var.pem_destination_path
+  }
+
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    host        = self.public_ip
+    private_key = file(var.pem_source_path)
+    timeout     = "4m"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod 400 ${var.pem_destination_path}",
+    ]
+  }
+
   tags = {
     Name = var.pub_instance
     DB   = var.tag_name_instance
