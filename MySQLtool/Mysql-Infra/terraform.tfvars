@@ -70,3 +70,5 @@ pvt_ec2_type         = "t3.micro"
 assign_public_IP_pub = true
 assign_public_IP_pvt = false
 volume_size          = 29
+pem_source_path      = "/home/ubuntu/mysql.pem"
+pem_destination_path = "/home/ubuntu/mysql.pem"
