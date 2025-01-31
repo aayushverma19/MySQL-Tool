@@ -59,108 +59,7 @@ variable "volume_size" {
   description = "root volume size for the EC2 instances"
 }
 
-##########################
-
-variable "tg_name" {
-  type        = string
-  default     = "Mysql-target"
-  description = "target group name"
-}
-variable "tg_port" {
-  type        = number
-  default     = 80
-  description = "target group port"
-}
-variable "tg_protocol" {
-  type        = string
-  default     = "HTTP"
-  description = "type of Target protocol"
-}
-variable "health_check_path" {
-  type        = string
-  default     = "/"
-  description = "enter health check path"
-}
-variable "health_check_interval" {
-  type        = number
-  default     = 280
-  description = "enter health check interval"
-}
-variable "health_check_timeout" {
-  type        = number
-  default     = 5
-  description = "enter health check timeout"
-}
-variable "health_check_threshold" {
-  type        = number
-  default     = 2
-  description = "enter health check healthy threshold"
-}
-variable "unhealth_check_threshold" {
-  type        = number
-  default     = 10
-  description = "enter health check unhealthy threshold"
-}
-variable "health_check_matcher" {
-  type        = string
-  default     = "200-299"
-  description = "enter health check matcher"
-}
-variable "tg_attachment_port" {
-  type        = number
-  default     = 80
-  description = "target group attachment port"
-}
-
-#####################
-
-
-variable "lb_name" {
-  type        = string
-  default     = "mysql-LB"
-  description = "enter load balancer name"
-}
-variable "lb_internal" {
-  type        = bool
-  default     = false
-  description = "enter load balancer internal"
-}
-variable "lb_tpye" {
-  type        = string
-  default     = "application"
-  description = "enter load balancer type"
-}
-
-variable "lb_enable_deletion" {
-  type        = bool
-  default     = false
-  description = "enter load balancer enable deletion protection"
-}
-
-##################################
-
-variable "alb_listener_port" {
-  type        = number
-  default     = 80
-  description = " alb listener port"
-}
-variable "alb_listener_protocol" {
-  type        = string
-  default     = "HTTP"
-  description = "type of Target protocol"
-}
-variable "alb_listener_action" {
-  type        = string
-  default     = "forward"
-  description = "type of Target protocol"
-}
-variable enable_deletion {
-  type        = bool
-  default     = false
-  description = "description"
-}
-
-#####################################module
+##################################### module
 variable "pub_sub_id" {
   type        = string
   default     = ""
@@ -191,4 +90,3 @@ variable "VPC_ID" {
   default     = ""
   description = "private group id pick from networking module"
 }
-
