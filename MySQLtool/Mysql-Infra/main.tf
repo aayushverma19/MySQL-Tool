@@ -45,6 +45,8 @@ module "Compute" {
   tag_name_ec2         = var.tag_name_ec2
   pvt_instance1        = var.pvt_instance1
   pvt_instance2        = var.pvt_instance2
+  pem_source_path      = var.pem_source_path
+  pem_destination_path = var.pem_destination_path
   ami_id               = var.ami_id
   key                  = var.pem_key
   pub_ec2_type         = var.pub_ec2_type
