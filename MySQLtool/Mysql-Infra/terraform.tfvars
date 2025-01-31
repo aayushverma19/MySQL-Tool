@@ -71,4 +71,5 @@ assign_public_IP_pub = true
 assign_public_IP_pvt = false
 volume_size          = 29
 pem_source_path      = "/home/ubuntu/mysql.pem"
+#pem_source_path      = "/var/lib/jenkins/mysql.pem" # for jenkins user
 pem_destination_path = "/home/ubuntu/mysql.pem"
