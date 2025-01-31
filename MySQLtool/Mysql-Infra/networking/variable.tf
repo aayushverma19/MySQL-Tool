@@ -1,100 +1,92 @@
-variable "vpc_name" {
+variable "pub_instance" {
   type        = string
-  default     = "MySQL-VPC"
-  description = "enter vpc name"
+  default     = "Bastion_host"
+  description = "enter public instance name"
 }
-variable "vpc_cidr" {
+variable "tag_name_instance" {
   type        = string
-  default     = "10.0.0.0/18"
-  description = "enter vpc cidr"
+  default     = "pub-mysql"
+  description = "enter tag name of instance"
 }
-variable "instance_tenancy" {
+variable "tag_name_ec2" {
   type        = string
-  default     = "default"
-  description = "vpc instance tenancy"
+  default     = "mysql"
+  description = "enter tag name of instance"
 }
-variable "dns_support" {
+variable "pvt_instance1" {
+  type        = string
+  default     = "Database-server1"
+  description = "enter Database server1 instance name"
+}
+variable "pvt_instance2" {
+  type        = string
+  default     = "Database-server2"
+  description = "enter Database server2 instance name"
+}
+variable "ami_id" {
+  type        = string
+  default     = "ami-0e2c8caa4b6378d8c"
+  description = "AMI ID of instanace"
+}
+variable "key" {
+  type        = string
+  default     = "nvirinia"
+  description = "enter pem key name"
+}
+variable "pub_ec2_type" {
+  type        = string
+  default     = "t2.micro"
+  description = "enter instance types"
+}
+variable "pvt_ec2_type" {
+  type        = string
+  default     = "t2.micro"
+  description = "enter instance types"
+}
+variable "assign_public_IP_pub" {
   type        = bool
   default     = true
-  description = "vpc dns support"
+  description = "assign_public_IP for private"
 }
-variable "dns_hostnames" {
+variable "assign_public_IP_pvt" {
   type        = bool
-  default     = true
-  description = "vpc dns hostnames"
+  default     = false
+  description = "assign_public_IP for private"
 }
-variable "pub_sub_name" {
+variable "volume_size" {
+  type        = number
+  default     = 29
+  description = "root volume size for the EC2 instances"
+}
+
+##################################### module
+variable "pub_sub_id" {
   type        = string
-  default     = "public-sub"
-  description = "enter public subnet name"
+  default     = ""
+  description = "public subnet id pick from networking module"
 }
-variable "pub_sub_cidr" {
+variable "pvt_sub1_id" {
   type        = string
-  default     = "10.0.1.0/24"
-  description = "enter pubic subnet cidr"
+  default     = ""
+  description = "private subnet1 id pick from networking module"
 }
-variable "az01" {
+variable "pvt_sub2_id" {
   type        = string
-  default     = "us-east-1a"
-  description = "enter the availability zone for public subnet"
+  default     = ""
+  description = "private subnet2 id pick from networking module"
 }
-variable "pvt_sub_name1" {
+variable "pub_sg" {
   type        = string
-  default     = "Database-sub1"
-  description = "enter private subnet1 name"
+  default     = ""
+  description = "public group id pick from networking module"
 }
-variable "pvt_sub1_cidr" {
+variable "pvt_sg" {
   type        = string
-  default     = "10.0.3.0/24"
-  description = "enter private subnet1 cidr"
+  default     = ""
+  description = "private group id pick from networking module"
 }
-variable "pvt_sub_name2" {
+variable "VPC_ID" {
   type        = string
-  default     = "Database-sub2"
-  description = "enter private subnet2 name"
-}
-variable "pvt_sub2_cidr" {
-  type        = string
-  default     = "10.0.6.0/24"
-  description = "enter private subnet2 cidr"
-}
-variable "az02" {
-  type        = string
-  default     = "us-east-1b"
-  description = "enter the availability zone for private subnet2"
-}
-variable "igw_name" {
-  type        = string
-  default     = "internet_gatewey"
-  description = "enter internet gatewey name"
-}
-variable "NAT_name" {
-  type        = string
-  default     = "NAT_gatewey"
-  description = "enter NAT gatewey name"
-}
-variable "local_gateway" {
-  type        = string
-  default     = "local"
-  description = "enter local gateway"
-}
-variable "RT-cidr_block" {
-  type        = string
-  default     = "0.0.0.0/0"
-  description = "enter route table cidr_block"
-}
-variable "public_RT_name" {
-  type        = string
-  default     = "Public-route-table"
-  description = "enter Public route table name"
-}
-variable "private_RT_name" {
-  type        = string
-  default     = "Private-route-table"
-  description = "enter Private route table name"
-}
-variable vpc_accept {
-  type        = bool
-  default     = true
-  description = "description"
+  default     = ""
+  description = "private group id pick from networking module"
 }
