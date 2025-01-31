@@ -12,7 +12,7 @@ resource "aws_security_group" "public_sgroups" {
       from_port   = ingress.value.from_port
       to_port     = ingress.value.to_port
       protocol    = ingress.value.protocol
-      cidr_blocks = ["0.0.0.0/0"]
+      cidr_blocks = ingress.value.cidr_blocks
       description = ingress.value.description
     }
   }
@@ -23,7 +23,7 @@ resource "aws_security_group" "public_sgroups" {
       from_port   = egress.value.from_port
       to_port     = egress.value.to_port
       protocol    = egress.value.protocol
-      cidr_blocks = ["0.0.0.0/0"]
+      cidr_blocks = egress.value.cidr_blocks
       description = egress.value.description
     }
   }
@@ -43,7 +43,7 @@ resource "aws_security_group" "private_sg" {
       from_port   = ingress.value.from_port
       to_port     = ingress.value.to_port
       protocol    = ingress.value.protocol
-      cidr_blocks = ["0.0.0.0/0"]
+      cidr_blocks = ingress.value.cidr_blocks
       description = ingress.value.description
     }
   }
@@ -54,7 +54,7 @@ resource "aws_security_group" "private_sg" {
       from_port   = egress.value.from_port
       to_port     = egress.value.to_port
       protocol    = egress.value.protocol
-      cidr_blocks = ["0.0.0.0/0"]
+      cidr_blocks = egress.value.cidr_blocks
       description = egress.value.description
     }
   }
@@ -73,23 +73,29 @@ resource "aws_network_acl" "naclpvt" {
   vpc_id = var.VPC_ID  
 
   # Ingress rule using the variable
-  ingress {
-    protocol   = var.ingress_rule_nacl.protocol
-    rule_no    = var.ingress_rule_nacl.rule_no
-    action     = var.ingress_rule_nacl.action
-    cidr_block = var.ingress_rule_nacl.cidr_block
-    from_port  = var.ingress_rule_nacl.from_port
-    to_port    = var.ingress_rule_nacl.to_port
+dynamic "ingress" {
+    for_each = var.ingress_rule_nacl
+    content {
+    protocol   = ingress.value.protocol
+    rule_no    = ingress.value.rule_no
+    action     = ingress.value.action
+    cidr_block = ingress.value.cidr_block
+    from_port  = ingress.value.from_port
+    to_port    = ingress.value.to_port
   }
+}
 
     # Egress rule using the variable
-  egress {
-    protocol   = var.egress_rule_nacl.protocol
-    rule_no    = var.egress_rule_nacl.rule_no
-    action     = var.egress_rule_nacl.action
-    cidr_block = var.egress_rule_nacl.cidr_block
-    from_port  = var.egress_rule_nacl.from_port
-    to_port    = var.egress_rule_nacl.to_port
+  dynamic "egress" {
+    for_each = var.egress_rule_nacl
+    content {
+    protocol   = egress.value.protocol
+    rule_no    = egress.value.rule_no
+    action     = egress.value.action
+    cidr_block = egress.value.cidr_block
+    from_port  = egress.value.from_port
+    to_port    = egress.value.to_port
+  }
   }
 
   tags = {
@@ -108,4 +114,3 @@ resource "aws_network_acl_association" "pv2" {
   network_acl_id = aws_network_acl.naclpvt.id
   subnet_id      = var.pvt_sub2_id
 }
-
