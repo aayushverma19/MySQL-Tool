@@ -52,10 +52,10 @@ module "Compute" {
   assign_public_IP_pub = var.assign_public_IP_pub
   assign_public_IP_pvt = var.assign_public_IP_pvt
   volume_size          = var.volume_size
-  VPC_ID      = module.Netwoking.vpc_id
-  pub_sub_id  = module.Netwoking.pub_subnet_id
-  pvt_sub1_id = module.Netwoking.pvt_subnet1_id
-  pvt_sub2_id = module.Netwoking.pvt_subnet2_id
-  pub_sg      = module.Security.pub_SG_id
-  pvt_sg      = module.Security.pvt_SG_id
+  VPC_ID               = module.Netwoking.vpc_id
+  pub_sub_id           = module.Netwoking.pub_subnet_id
+  pvt_sub1_id          = module.Netwoking.pvt_subnet1_id
+  pvt_sub2_id          = module.Netwoking.pvt_subnet2_id
+  pub_sg               = module.Security.pub_SG_id
+  pvt_sg               = module.Security.pvt_SG_id
 }
