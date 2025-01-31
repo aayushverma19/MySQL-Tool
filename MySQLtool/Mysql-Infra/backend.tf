@@ -1,8 +1,8 @@
 terraform {
   backend "s3" {
-    bucket         = "mysql-final-tool"
+    bucket         = "mysql-backup-tool-bucket"
     key            = "terraform.tfstate"
-    region         = "eu-north-1"
+    region         = "us-east-1"
     dynamodb_table = "terraform-lock"
     encrypt        = true
   }
