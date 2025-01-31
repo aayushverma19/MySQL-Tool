@@ -49,7 +49,3 @@ output "Bastion_Public_IP" {
   value       = module.Compute.Bastion_Public_IP
   description = "Public IP address of the bastion EC2 instance"
 }
-# output "load_balancer_DNS" {
-#   value       = module.Compute.load_balancer_DNS
-#   description = "DNS name of load balancer"
-# }
