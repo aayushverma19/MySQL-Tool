@@ -322,3 +322,14 @@ variable "volume_size" {
   default     = 29
   description = "root volume size for the EC2 instances"
 }
+variable "pem_source_path" {
+  description = "Local path to the private key file"
+  type        = string
+  default     = "/home/ubuntu/mysql.pem"
+}
+
+variable "pem_destination_path" {
+  description = "Remote path for the private key file"
+  type        = string
+  default     = "/home/ubuntu/mysql.pem"
+}
