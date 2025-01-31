@@ -1,12 +1,3 @@
-# output "default_vpc_id" {
-#   value = module.Netwoking.default_vpc_id
-# }
-# output "default_vpc_cidr" {
-#   value = data.aws_vpc.default.cidr_block
-# }
-# output "default_mainrt" {
-#   value = data.aws_vpc.default.main_route_table_id
-# }
 output "vpc_id" {
   value       = module.Netwoking.vpc_id
   description = "id of the mysql vpc "
@@ -58,7 +49,7 @@ output "Bastion_Public_IP" {
   value       = module.Compute.Bastion_Public_IP
   description = "Public IP address of the bastion EC2 instance"
 }
-output "load_balancer_DNS" {
-  value       = module.Compute.load_balancer_DNS
-  description = "DNS name of load balancer"
-}
+# output "load_balancer_DNS" {
+#   value       = module.Compute.load_balancer_DNS
+#   description = "DNS name of load balancer"
+# }
