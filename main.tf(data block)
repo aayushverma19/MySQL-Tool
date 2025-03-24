@@ -1,0 +1,29 @@
+#use default vpc
+
+data "aws_vpc" "ot_ms_vpc" {
+  filter {
+    name   = "tag:Name"
+    values = ["ot_ms_vpc"]
+  }
+}
+
+output "default_vpc_id" {
+  value = data.aws_vpc.ot_ms_vpc.id
+}
+output "default_vpc_cidr" {
+  value = data.aws_vpc.ot_ms_vpc.cidr_block
+}
+output "default_mainrt" {
+  value = data.aws_vpc.ot_ms_vpc.main_route_table_id
+}
+
+
+resource "aws_internet_gateway" "IGW" {
+  vpc_id = data.aws_vpc.ot_ms_vpc.id
+
+  tags = {
+    Name  = "Internet Gateway"
+    env   = "dev"
+    owner = "aayush"
+  }
+}
